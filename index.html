@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Étapes Santé — Parcours prévention</title>
+  <meta name="description" content="Parcours de prévention gamifié Étapes Santé : repérer, parler, agir tôt pour préserver la santé, la sécurité et la qualité du travail." />
+  <meta name="theme-color" content="#0F8676" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Étapes Santé" />
+
+  <!-- Polices : Bricolage Grotesque (titres) + Hanken Grotesk (corps) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS dans l ordre impose -->
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <link rel="stylesheet" href="css/screen-workstation.css" />
+  <link rel="stylesheet" href="css/screen-hidden.css" />
+</head>
+<body>
+
+  <!-- Fond atmospherique decoratif -->
+  <div class="app-bg" id="appBg" aria-hidden="true"></div>
+
+  <div class="app" data-theme="intro">
+
+    <!-- ====================== HEADER ====================== -->
+    <header class="app-header">
+      <div class="shell">
+        <div class="app-header__row">
+          <a class="brand" href="#" aria-label="Étapes Santé, accueil du parcours">
+            <img src="assets/logo.png" alt="Étapes Santé" />
+          </a>
+
+          <div class="header-meta">
+            <!-- Score -->
+            <div class="score" id="score" rôle="status" aria-label="Score">
+              <span class="score__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6l2.5 5.4 5.9.6-4.4 4 1.2 5.8L12 16.9 6.8 19.4 8 13.6l-4.4-4 5.9-.6L12 3.6Z"/></svg>
+              </span>
+              <span class="score__value" id="scoreValue">0</span>
+              <span class="score__sep">/</span>
+              <span id="scoreMax">14</span>
+            </div>
+
+            <!-- Badges -->
+            <div class="badges">
+              <button class="badges__btn" id="badgesBtn" type="button" aria-expanded="false" aria-controls="badgesDrawer" aria-label="Voir les badges débloqués">
+                <span class="icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20c0-8 6-14 16-14 0 10-6 16-16 14Z"/><path d="M4 20c4-6 8-9 12-10"/></svg>
+                </span>
+                <span class="badges__label">Badges</span>
+                <span class="badges__count" id="badgesCount">0</span>
+              </button>
+
+              <div class="badges__drawer" id="badgesDrawer" rôle="region" aria-label="Badges débloqués">
+                <div class="badges__drawer-core">
+                  <h3>Badges débloqués</h3>
+                  <div class="badges__list" id="badgesList"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progression -->
+        <div class="progress">
+          <div class="progress__row">
+            <span class="progress__label" id="progressLabel">Étape <b>1</b> / 17</span>
+            <span class="progress__pct" id="progressPct">6%</span>
+          </div>
+          <div class="progress__track">
+            <div class="progress__fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====================== SCENE (ecran courant) ====================== -->
+    <main class="stage shell" id="stage" aria-live="polite"></main>
+
+    <!-- ====================== FOOTER ====================== -->
+    <footer class="app-footer">
+      <div class="shell">
+        <div class="app-footer__row">
+          <p class="thread">
+            <span class="thread__dot" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/></svg>
+            </span>
+            <span class="thread__text" id="threadText">Tu n’as pas a deviner.</span>
+          </p>
+
+          <nav class="nav-mini" aria-label="Navigation du parcours">
+            <button class="nav-mini__reset" id="resetBtn" type="button">Recommencer</button>
+            <button class="nav-mini__btn" id="prevBtn" type="button" aria-label="Étape précédente" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+            </button>
+            <button class="nav-mini__btn" id="nextBtn" type="button" aria-label="Étape suivante">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toasts (badge débloqué) -->
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <!-- ====================== JS dans l ordre impose ====================== -->
+  <script src="js/engine.js"></script>
+  <script src="js/illustrations.js"></script>
+  <script src="js/mechanics.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/screen-workstation.js"></script>
+  <script src="js/screen-hidden.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

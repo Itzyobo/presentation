@@ -1,0 +1,620 @@
+/* ==========================================================================
+   base.css — Typographie, shell de l app (header / progress / score / badges /
+   footer), fond atmospherique, classes de transition d'écran.
+   ========================================================================== */
+
+/* --- Echelle typographique fluide --- */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* ==========================================================================
+   Fond atmospherique : deux halos teintes très doux, fixes, non interactifs
+   ========================================================================== */
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(60vw 50vw at 12% -8%, rgba(15, 134, 118, .10), transparent 60%),
+    radial-gradient(55vw 45vw at 108% 12%, rgba(46, 111, 160, .08), transparent 60%),
+    radial-gradient(50vw 40vw at 50% 116%, rgba(87, 179, 111, .08), transparent 60%);
+}
+
+.app-bg svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .5;
+}
+
+/* ==========================================================================
+   Structure generale
+   ========================================================================== */
+.app {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--content);
+  margin-inline: auto;
+  padding-inline: var(--px);
+}
+
+/* ==========================================================================
+   Header : logo + progression + score + badges
+   ========================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-block: 14px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.app-header__row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.brand img {
+  height: 44px;
+  width: auto;
+}
+
+.header-meta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- Score chip --- */
+.score {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1), var(--inset-hi);
+  font-weight: 600;
+  font-size: .9rem;
+  white-space: nowrap;
+}
+
+.score__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  background: var(--leaf-tint);
+  color: var(--leaf);
+}
+
+.score__icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.score__value {
+  font-variant-numeric: tabular-nums;
+  transition: transform var(--t-mid) var(--ease-out);
+}
+
+.score.bump .score__value {
+  transform: scale(1.18);
+}
+
+.score__sep {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+/* --- Badges (compteur + tiroir) --- */
+.badges {
+  position: relative;
+}
+
+.badges__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1), var(--inset-hi);
+  font-weight: 600;
+  font-size: .9rem;
+  transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-mid) var(--ease-out);
+}
+
+.badges__btn .icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-pill);
+  background: var(--primary-tint);
+  color: var(--primary);
+}
+
+.badges__btn .icon-wrap svg {
+  width: 14px;
+  height: 14px;
+}
+
+.badges__btn:active {
+  transform: scale(.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .badges__btn:hover {
+    box-shadow: var(--shadow-2), var(--inset-hi);
+  }
+}
+
+.badges__count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Tiroir de badges --- */
+.badges__drawer {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(320px, 80vw);
+  padding: 7px;
+  border-radius: var(--r-lg);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-3);
+  transform-origin: top right;
+  transform: scale(.96);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform var(--t-mid) var(--ease-out),
+    opacity var(--t-mid) var(--ease-out),
+    visibility var(--t-mid);
+  z-index: 30;
+}
+
+.badges__drawer.open {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
+.badges__drawer-core {
+  background: var(--surface);
+  border-radius: calc(var(--r-lg) - 6px);
+  box-shadow: var(--inset-hi);
+  padding: 16px;
+}
+
+.badges__drawer h3 {
+  font-size: .82rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+
+.badges__list {
+  display: grid;
+  gap: 9px;
+}
+
+.badges__empty {
+  font-size: .9rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.badge-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--r-md);
+  background: var(--leaf-tint);
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: badgeIn .34s var(--ease-out) forwards;
+}
+
+.badge-pill .icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: var(--r-pill);
+  background: var(--leaf);
+  color: #fff;
+}
+
+.badge-pill .icon-wrap svg {
+  width: 15px;
+  height: 15px;
+}
+
+@keyframes badgeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Progression : étape X/N + barre
+   ========================================================================== */
+.progress {
+  padding-block: 12px 6px;
+}
+
+.progress__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+.progress__label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress__label b {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.progress__pct {
+  font-size: .78rem;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress__track {
+  position: relative;
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--bg-2);
+  box-shadow: inset 0 1px 2px rgba(20, 49, 58, .07);
+  overflow: hidden;
+}
+
+.progress__fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: transform var(--t-slow) var(--ease-out);
+}
+
+/* ==========================================================================
+   Footer : phrase fil-rouge + navigation precedent / suivant
+   ========================================================================== */
+.app-footer {
+  margin-top: auto;
+  padding-block: 18px 26px;
+}
+
+.app-footer__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border: 1px solid var(--line-2);
+}
+
+.thread {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .92rem;
+  color: var(--ink-2);
+  min-width: 0;
+}
+
+.thread__dot {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.thread__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-mini {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.nav-mini__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--t-fast) var(--ease-out),
+    box-shadow var(--t-mid) var(--ease-out),
+    color var(--t-mid), opacity var(--t-mid);
+}
+
+.nav-mini__btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-mini__btn:active {
+  transform: scale(.94);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-mini__btn:not(:disabled):hover {
+    color: var(--accent-strong);
+    box-shadow: var(--shadow-2);
+  }
+}
+
+.nav-mini__btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.nav-mini__reset {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink-3);
+  padding: 9px 14px;
+  border-radius: var(--r-pill);
+  transition: color var(--t-mid), background var(--t-mid);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-mini__reset:hover {
+    color: var(--alert-strong);
+    background: var(--alert-tint);
+  }
+}
+
+/* ==========================================================================
+   Zone principale + transitions d'écran
+   ========================================================================== */
+.stage {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding-block: clamp(22px, 4vh, 44px) 8px;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vh, 34px);
+}
+
+/* Classes de transition appliquees par le moteur (transform + opacity only) */
+.screen.is-entering-next {
+  animation: screenInNext var(--t-slow) var(--ease-out) both;
+}
+
+.screen.is-entering-prev {
+  animation: screenInPrev var(--t-slow) var(--ease-out) both;
+}
+
+.screen.is-leaving-next {
+  animation: screenOutNext var(--t-mid) var(--ease-out) both;
+}
+
+.screen.is-leaving-prev {
+  animation: screenOutPrev var(--t-mid) var(--ease-out) both;
+}
+
+@keyframes screenInNext {
+  from {
+    opacity: 0;
+    transform: translateX(26px) scale(.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes screenInPrev {
+  from {
+    opacity: 0;
+    transform: translateX(-26px) scale(.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes screenOutNext {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+}
+
+@keyframes screenOutPrev {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+}
+
+/* Rythme vertical du corps d'ecran : évite que les blocs (situation,
+   question, options, scene, instruction...) se touchent. */
+.stagger {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.4vh, 22px);
+}
+
+/* Reveals etages à l'entree de l'ecran (stagger) */
+.stagger>* {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: itemIn .42s var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 55ms + 60ms);
+}
+
+@keyframes itemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .screen.is-entering-next,
+  .screen.is-entering-prev,
+  .screen.is-leaving-next,
+  .screen.is-leaving-prev {
+    animation: fadeOnly var(--t-mid) ease both;
+  }
+
+  .stagger>* {
+    transform: none;
+    animation: fadeOnly .3s ease forwards;
+    animation-delay: 0ms;
+  }
+
+  @keyframes fadeOnly {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Sr-only utilitaire */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Responsive header / footer
+   ========================================================================== */
+@media (max-width: 720px) {
+  .app-header__row {
+    gap: 10px;
+  }
+
+  .brand img {
+    height: 34px;
+  }
+
+  .header-meta {
+    gap: 8px;
+  }
+
+  .score,
+  .badges__btn {
+    padding: 6px 11px 6px 8px;
+    font-size: .84rem;
+  }
+
+  .score__sep {
+    display: none;
+  }
+
+  .badges__label {
+    display: none;
+  }
+
+  .app-footer__row {
+    flex-wrap: wrap;
+  }
+
+  .nav-mini {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .thread {
+    width: 100%;
+  }
+}

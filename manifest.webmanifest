@@ -1,0 +1,22 @@
+{
+  "name": "Etap-Santé — Parcours prévention",
+  "short_name": "Etap-Santé",
+  "description": "Parcours de prévention gamifié : repérer, parler, agir tôt pour préserver la santé, la sécurité et la qualité du travail.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F3F7F6",
+  "theme_color": "#0F8676",
+  "categories": ["health", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}
