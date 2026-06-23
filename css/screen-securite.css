@@ -1,0 +1,92 @@
+/* ==========================================================================
+   screen-securite.css — mise en page propre au module Livret Securite
+   (ecrans texte, mini-jeux, recap des acteurs). Tokens reels uniquement.
+   ========================================================================== */
+
+.sec-screen { display: flex; flex-direction: column; gap: 18px; }
+
+/* ---------- Ecrans informatifs (texte) ---------- */
+.sec-prose {
+  font-size: 1.08rem;
+  color: var(--ink-2);
+  line-height: 1.65;
+  max-width: 64ch;
+}
+.sec-prose strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Bloc de manche / mini-jeu ---------- */
+.mj-block { display: flex; flex-direction: column; gap: 16px; }
+.mj-figure { max-width: 460px; }
+.mj-figure .art-core { padding: 10px; }
+.mj-figure svg { width: 100%; height: auto; }
+.mj-legendes { display: grid; gap: 8px; }
+.mj-legende {
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  font-size: .92rem;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+.mj-foot, .minijeu__foot { display: flex; }
+
+.minijeu__stage { display: flex; flex-direction: column; gap: 16px; }
+.minijeu__resolve { display: flex; flex-direction: column; gap: 14px; }
+
+.manche-title { display: flex; flex-direction: column; gap: 4px; }
+.manche-title__tag {
+  font-size: .74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--accent-strong);
+}
+.manche-title__text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink);
+  letter-spacing: -.01em;
+  line-height: 1.25;
+}
+
+/* ---------- Recap des acteurs (e14) ---------- */
+.recap-blocs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.recap-bloc {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1), var(--inset-hi);
+}
+.recap-bloc__head { display: flex; gap: 12px; align-items: flex-start; }
+.recap-bloc__heading { display: flex; flex-direction: column; gap: 2px; }
+.recap-bloc__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--ink); line-height: 1.2;
+}
+.recap-bloc__leg { font-size: .82rem; color: var(--ink-3); }
+.recap-people { display: flex; flex-wrap: wrap; gap: 8px; }
+.recap-person {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: var(--r-pill);
+  background: var(--accent-tint);
+}
+.recap-person__photo {
+  width: 30px; height: 30px;
+  border-radius: var(--r-pill);
+  object-fit: cover;
+  background: var(--surface);
+}
+.recap-person__name { font-size: .85rem; font-weight: 600; color: var(--accent-strong); }
+.recap-bloc__text { font-size: .95rem; color: var(--ink-2); line-height: 1.55; }
+
+@media (max-width: 760px) { .recap-blocs { grid-template-columns: 1fr; } }

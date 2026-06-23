@@ -1126,30 +1126,113 @@
       badgesWrap.appendChild(el("p", { class: "badges__empty", text: "Aucun badge cette fois. Tu peux retenter le parcours." }));
     }
 
-    // actions : revoir (revenir a 0) + recommencer (reset)
-    var actions = el("div", { class: "final__actions" }, [
-      el("button", {
+    // actions : continuer au livret securite + revoir (revenir a 0) + recommencer (reset)
+    var targetIdx = -1;
+    for (var i = 0; i < App.screens.length; i++) {
+      if (App.screens[i].id === 'e0') {
+        targetIdx = i;
+        break;
+      }
+    }
+
+    var actionsList = [];
+    if (targetIdx !== -1) {
+      // Bouton principal mis en évidence
+      actionsList.push(el("button", {
+        class: "btn btn--primary",
+        attrs: { type: "button" },
+        on: { click: function () { App.goto(targetIdx, { direction: "next" }); } }
+      }, [
+        el("span", { class: "btn__label", text: "Continuer au Livret sécurité" }),
+        el("span", { class: "btn__icon", html: App.icon("arrow") })
+      ]));
+
+      // Bouton "Revoir les étapes" rétrogradé en soft pour mettre en valeur le bouton continuer
+      actionsList.push(el("button", {
+        class: "btn btn--soft",
+        attrs: { type: "button" },
+        on: { click: function () { App.goto(0, { direction: "prev" }); } }
+      }, [
+        el("span", { class: "btn__label", text: d.cta || "Revoir les étapes" }),
+        el("span", { class: "btn__icon", html: App.icon("arrow") })
+      ]));
+    } else {
+      // Comportement par défaut si le livret sécurité n'est pas présent
+      actionsList.push(el("button", {
         class: "btn btn--primary",
         attrs: { type: "button" },
         on: { click: function () { App.goto(0, { direction: "prev" }); } }
       }, [
         el("span", { class: "btn__label", text: d.cta || "Revoir les étapes" }),
         el("span", { class: "btn__icon", html: App.icon("arrow") })
+      ]));
+    }
+
+    actionsList.push(el("button", {
+      class: "btn btn--ghost",
+      attrs: { type: "button" },
+      on: { click: function () { App.reset(); } }
+    }, [
+      el("span", { class: "btn__label", text: "Tout recommencer" }),
+      el("span", { class: "btn__icon", html: App.icon("refresh") })
+    ]));
+
+    // --- Formulaire de certificat PDF ---
+    var certForm = el("div", { class: "cert-form" }, [
+      el("div", { class: "cert-form__title" }, [
+        el("span", { class: "icon-wrap", html: App.icon("star") }),
+        "Télécharger mon certificat"
+      ]),
+      el("div", { class: "cert-form__fields" }, [
+        el("input", {
+          class: "cert-form__input",
+          id: "certFirstName",
+          attrs: { type: "text", placeholder: "Prénom", autocomplete: "given-name", required: "true" }
+        }),
+        el("input", {
+          class: "cert-form__input",
+          id: "certLastName",
+          attrs: { type: "text", placeholder: "Nom de famille", autocomplete: "family-name", required: "true" }
+        })
       ]),
       el("button", {
-        class: "btn btn--ghost",
+        class: "cert-form__btn",
+        id: "certDownloadBtn",
         attrs: { type: "button" },
-        on: { click: function () { App.reset(); } }
+        on: {
+          click: function () {
+            var firstInput = document.getElementById("certFirstName");
+            var lastInput = document.getElementById("certLastName");
+            var btn = document.getElementById("certDownloadBtn");
+            var first = firstInput ? firstInput.value.trim() : "";
+            var last = lastInput ? lastInput.value.trim() : "";
+            if (!first || !last) {
+              window.alert("Merci de renseigner ton prénom et ton nom.");
+              if (!first && firstInput) firstInput.focus();
+              else if (!last && lastInput) lastInput.focus();
+              return;
+            }
+            btn.disabled = true;
+            var p = App.generatePDF(first, last);
+            if (p && p.then) {
+              p.then(function() { btn.disabled = false; }).catch(function() { btn.disabled = false; });
+            } else {
+              btn.disabled = false;
+            }
+          }
+        }
       }, [
-        el("span", { class: "btn__label", text: "Tout recommencer" }),
-        el("span", { class: "btn__icon", html: App.icon("refresh") })
+        el("span", { class: "icon-wrap", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v10M7 12l5 5 5-5"/><path d="M5 19h14"/></svg>' }),
+        el("span", { class: "btn__label", text: "Télécharger mon certificat" })
       ])
     ]);
+
+    var actions = el("div", { class: "final__actions" }, actionsList);
 
     // pas de CTA footer additionnel ici (les actions sont dans le corps)
 
     var left = el("div", { class: "final__head" }, [ring, tierBox]);
-    var right = el("div", { class: "final__copy" }, [body, badgesWrap, actions]);
+    var right = el("div", { class: "final__copy" }, [body, badgesWrap, certForm, actions]);
 
     return staggerWrap([
       el("div", { class: "final" }, [left, right])

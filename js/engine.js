@@ -619,5 +619,98 @@
     return tiers[tiers.length - 1] || null;
   };
 
+  /* ====================================================================
+     IMPRESSION DU CERTIFICAT — html2pdf.js
+     Téléchargement direct en un clic, sans ouvrir la boite d'impression.
+     ==================================================================== */
+  App.generatePDF = function (firstName, lastName) {
+    if (!firstName || !lastName) {
+      window.alert("Merci de renseigner ton prenom et ton nom.");
+      return;
+    }
+
+    if (typeof html2pdf === "undefined") {
+      window.alert("La librairie de génération PDF n'est pas chargee.");
+      return;
+    }
+
+    // 1. Peupler le nom
+    var nameEl = document.getElementById("certName");
+    if (nameEl) nameEl.textContent = firstName.trim() + " " + lastName.trim();
+
+    // 2. Peupler le score
+    var scoreEl = document.getElementById("certScore");
+    var maxEl = document.getElementById("certScoreMax");
+    if (scoreEl) scoreEl.textContent = App.state.score;
+    if (maxEl) maxEl.textContent = "/ " + App.state.maxScore;
+
+    // 3. Peupler le palier
+    var tierEl = document.getElementById("certTier");
+    var s17Def = App.screens.find(function (s) { return s.id === "s17"; });
+    var tiers = (s17Def && s17Def.data && s17Def.data.tiers) ? s17Def.data.tiers : [];
+    var tier = App.tierFor(tiers, App.state.score);
+    if (tierEl) {
+      tierEl.textContent = tier ? tier.label : "";
+    }
+
+    // 4. Peupler les badges
+    var badgesList = document.getElementById("certBadges");
+    if (badgesList) {
+      badgesList.innerHTML = "";
+      App.state.badges.forEach(function (b) {
+        var li = document.createElement("li");
+        li.className = "cert__badge";
+        li.innerHTML = '<span class="cert__badge-dot"></span>' + b.label;
+        badgesList.appendChild(li);
+      });
+    }
+
+    // 5. Date et ID
+    var dateEl = document.getElementById("certDate");
+    var idEl = document.getElementById("certId");
+    var now = new Date();
+    var mo = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+    if (dateEl) {
+      dateEl.textContent = "Le " + now.getDate() + " " + mo[now.getMonth()] + " " + now.getFullYear();
+    }
+    if (idEl) {
+      idEl.textContent = "ES-" + now.getFullYear() + App.pad(now.getMonth()+1) + App.pad(now.getDate()) +
+        "-" + Math.random().toString(36).substring(2,7).toUpperCase();
+    }
+
+    // Bouton loading
+    var dlBtn = document.getElementById("certDownloadBtn");
+    if (dlBtn) dlBtn.classList.add("is-loading");
+
+    // 6. Cloner le noeud et le rendre visible hors-écran
+    var originalEl = document.getElementById("certificate-template");
+    var printContainer = document.createElement("div");
+    printContainer.style.position = "absolute";
+    printContainer.style.left = "-9999px";
+    printContainer.style.top = "-9999px";
+    var el = originalEl.cloneNode(true);
+    el.style.display = "block";
+    printContainer.appendChild(el);
+    document.body.appendChild(printContainer);
+
+    var opt = {
+      margin:       0,
+      filename:     "Certificat_Etapes_Sante_" + firstName.trim() + "_" + lastName.trim() + ".pdf",
+      image:        { type: 'jpeg', quality: 1 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    return html2pdf().set(opt).from(el.querySelector(".cert")).save().then(function() {
+      if (dlBtn) dlBtn.classList.remove("is-loading");
+      document.body.removeChild(printContainer);
+    }).catch(function(err) {
+      console.error(err);
+      if (dlBtn) dlBtn.classList.remove("is-loading");
+      document.body.removeChild(printContainer);
+    });
+  };
+
   window.App = App;
 })(window, document);
+

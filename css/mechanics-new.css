@@ -1,0 +1,229 @@
+/* ==========================================================================
+   mechanics-new.css — styles des nouvelles mecaniques du Livret Securite
+   Reutilise les tokens reels (tokens.css) : --accent, --ok, --alert, --warn,
+   --r-*, --shadow-*, --inset-hi. Aucune variable inventee.
+   ========================================================================== */
+
+/* ==========================================================================
+   FLIP CARDS (cartes_a_retourner) — vrai retournement 3D
+   ========================================================================== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.flip-card {
+  perspective: 1200px;
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 210px;
+}
+.flip-card__inner {
+  position: relative;
+  width: 100%;
+  min-height: 210px;
+  transition: transform .55s var(--ease-in-out);
+  transform-style: preserve-3d;
+}
+.flip-card.is-flipped .flip-card__inner { transform: rotateY(180deg); }
+.flip-card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-2), var(--inset-hi);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-card__front {
+  background: var(--accent);
+  color: #fff;
+  justify-content: space-between;
+  gap: 14px;
+}
+.flip-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12rem;
+  line-height: 1.25;
+}
+.flip-card__hint {
+  align-self: flex-end;
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, .2);
+}
+.flip-card__hint svg { width: 18px; height: 18px; }
+.flip-card__back {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  transform: rotateY(180deg);
+  overflow: auto;
+  gap: 10px;
+}
+.flip-card__back-text { font-size: .94rem; line-height: 1.5; }
+.flip-card__read {
+  display: grid; place-items: center;
+  width: 26px; height: 26px;
+  border-radius: var(--r-pill);
+  background: var(--ok-tint); color: var(--ok);
+  flex: 0 0 auto;
+}
+.flip-card__read svg { width: 15px; height: 15px; }
+
+@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   DRAG & DROP — remettre dans l'ordre (sortable)
+   ========================================================================== */
+.dd { display: flex; flex-direction: column; gap: 14px; }
+.dd-figure { max-width: 440px; }
+.dd-figure .art-core { padding: 10px; }
+.dd-figure svg { width: 100%; height: auto; }
+.dd-list { display: flex; flex-direction: column; gap: 10px; }
+.drag-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-1), var(--inset-hi);
+  touch-action: none;          /* indispensable : empeche le scroll pendant le drag tactile */
+  user-select: none;
+  cursor: grab;
+  transition: border-color var(--t-mid), box-shadow var(--t-mid), transform var(--t-fast) var(--ease-out);
+}
+.drag-item:active { cursor: grabbing; }
+.drag-item.is-dragging { opacity: .9; border-color: var(--accent); box-shadow: var(--shadow-3); transform: scale(1.015); }
+.drag-item__handle {
+  display: grid; place-items: center;
+  width: 30px; height: 30px; flex: 0 0 auto;
+  border-radius: var(--r-md);
+  background: var(--accent-tint); color: var(--accent-strong);
+}
+.drag-item__handle svg { width: 16px; height: 16px; }
+.drag-item__text { line-height: 1.4; color: var(--ink); font-size: .98rem; }
+.drag-item.is-correct { border-color: var(--ok); background: var(--ok-tint); }
+.drag-item.is-wrong { border-color: var(--alert); background: var(--alert-tint); }
+.dd-foot { display: flex; }
+
+/* ==========================================================================
+   DRAG ZONES — deposer les bons elements (triangle du feu)
+   ========================================================================== */
+.dd-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.dd-zone {
+  position: relative;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 14px;
+  border: 2px dashed var(--accent);
+  border-radius: var(--r-lg);
+  background: var(--accent-tint);
+  transition: background var(--t-mid), border-color var(--t-mid);
+}
+.dd-zone.is-over { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.dd-zone__art { width: 100%; max-width: 220px; }
+.dd-zone__art svg { width: 100%; height: auto; }
+.dd-zone__hint { font-size: .84rem; font-weight: 600; color: var(--accent-strong); text-align: center; }
+.dd-bank {
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 120px;
+  padding: 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--bg-2);
+  transition: background var(--t-mid);
+}
+.dd-bank.is-over { background: var(--surface-2); }
+.dd-chip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-1);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  transition: border-color var(--t-mid), box-shadow var(--t-mid);
+}
+.dd-chip:active { cursor: grabbing; }
+.dd-chip.is-dragging { position: relative; z-index: 5; border-color: var(--accent); box-shadow: var(--shadow-3); }
+.dd-chip__grip { display: grid; place-items: center; width: 18px; height: 18px; color: var(--accent); flex: 0 0 auto; }
+.dd-chip__grip svg { width: 12px; height: 12px; }
+.dd-chip__text { font-size: .9rem; line-height: 1.35; color: var(--ink); }
+.dd-chip.is-correct { border-color: var(--ok); background: var(--ok-tint); }
+.dd-chip.is-wrong { border-color: var(--alert); background: var(--alert-tint); }
+.dd-chip.is-missed { border-color: var(--warn); background: var(--warn-tint); }
+.dd-chip.is-muted { opacity: .5; }
+
+@media (max-width: 640px) { .dd-zones { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   ASSOCIATION — relier des paires + lignes SVG
+   ========================================================================== */
+.assoc-wrap { display: flex; flex-direction: column; gap: 16px; }
+.assoc {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 12vw, 130px);
+}
+.assoc-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 1; }
+.assoc-col { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2; }
+.assoc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  box-shadow: var(--shadow-1), var(--inset-hi);
+  transition: border-color var(--t-mid), box-shadow var(--t-mid) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .assoc-item:not(:disabled):hover { border-color: var(--accent); box-shadow: var(--shadow-2); }
+}
+.assoc-item.is-selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-tint), var(--shadow-2); }
+.assoc-item.is-correct { border-color: var(--ok); background: var(--ok-tint); }
+.assoc-item.is-wrong { border-color: var(--alert); background: var(--alert-tint); }
+.assoc-item__photo {
+  width: 42px; height: 42px; flex: 0 0 auto;
+  border-radius: var(--r-pill);
+  object-fit: cover;
+  background: var(--accent-tint);
+}
+.assoc-item__label { font-size: .95rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.assoc-item__plug { width: 12px; height: 12px; border-radius: var(--r-pill); background: var(--accent); flex: 0 0 auto; }
+.assoc-item--left .assoc-item__plug { margin-left: auto; }
+.assoc-line { stroke: var(--accent); fill: none; }
+.assoc-line--correct { stroke: var(--ok); }
+.assoc-line--error { stroke: var(--alert); }
+.assoc-foot { display: flex; }
+
+/* ==========================================================================
+   INDICATEUR DE MANCHE (mini-jeu)
+   ========================================================================== */
+.manche-indicator { display: flex; gap: 8px; }
+.manche-dot {
+  width: 10px; height: 10px;
+  border-radius: var(--r-pill);
+  background: var(--line);
+  transition: background var(--t-mid), transform var(--t-mid);
+}
+.manche-dot.is-active { background: var(--accent); transform: scale(1.3); }
+.manche-dot.is-done { background: var(--ok); }
+.manche-dot.is-failed { background: var(--alert); }

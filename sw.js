@@ -9,7 +9,7 @@
    ========================================================================== */
 "use strict";
 
-var VERSION = "etap-sante-v1";
+var VERSION = "etap-sante-v2";
 var CACHE = VERSION;
 
 /* Shell de l application (chemins relatifs au scope du worker). */
@@ -23,15 +23,23 @@ var PRECACHE = [
   "./css/screens.css",
   "./css/screen-workstation.css",
   "./css/screen-hidden.css",
+  "./css/mechanics-new.css",
+  "./css/screen-securite.css",
   "./js/engine.js",
   "./js/illustrations.js",
   "./js/mechanics.js",
   "./js/content.js",
   "./js/screen-workstation.js",
   "./js/screen-hidden.js",
+  "./js/screen-dragdrop.js",
+  "./js/screen-association.js",
+  "./js/mechanics-securite.js",
+  "./js/content-securite.js",
   "./js/main.js",
   "./assets/logo.png",
   "./assets/favicon.svg"
+  // Photos des personnes ressources (e13/e14) : non fournies dans /assets ;
+  // le code utilise un fallback onerror. Ajoute-les ici si elles arrivent.
 ];
 
 /* -------------------------------------------------- Install : precache */

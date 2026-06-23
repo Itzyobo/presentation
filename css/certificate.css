@@ -1,0 +1,418 @@
+/* ==========================================================================
+   certificate.css — Styles du diplôme / certificat PDF
+   Haute Fidélité : polices réelles, SVG nets, couleurs exactes.
+   ========================================================================== */
+
+/* ---- Conteneur principal (template caché sur la page normale) ---- */
+#certificate-template {
+  display: none;
+}
+
+/* ==========================================================================
+   LA FEUILLE DU DIPLÔME (A4 Paysage Exact)
+   ========================================================================== */
+.cert {
+  width: 297mm;
+  height: 210mm;
+  padding: 18mm 22mm;
+  background: #FFFFFF;
+  color: var(--ink, #14313A);
+  font-family: "Hanken Grotesk", "Segoe UI", sans-serif;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* ---- Bordure décorative double (Soft Structuralism) ---- */
+.cert::before {
+  content: "";
+  position: absolute;
+  inset: 8mm;
+  border: 2.5px solid var(--primary, #0F8676);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.cert::after {
+  content: "";
+  position: absolute;
+  inset: 11mm;
+  border: 1px solid rgba(15, 134, 118, .25);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* ---- Filigrane décoratif (coins en L) ---- */
+.cert__corner {
+  position: absolute;
+  width: 36mm;
+  height: 36mm;
+  opacity: .12; /* Légèrement plus visible */
+}
+.cert__corner--tl { top: 12mm; left: 12mm; }
+.cert__corner--tr { top: 12mm; right: 12mm; transform: scaleX(-1); }
+.cert__corner--bl { bottom: 12mm; left: 12mm; transform: scaleY(-1); }
+.cert__corner--br { bottom: 12mm; right: 12mm; transform: scale(-1); }
+
+.cert__corner svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- En-tête du certificat ---- */
+.cert__header {
+  text-align: center;
+  margin-bottom: 4mm;
+  position: relative;
+  z-index: 1;
+}
+
+.cert__logo {
+  width: 18mm;
+  height: auto;
+  margin: 0 auto 3mm;
+  display: block;
+}
+
+.cert__org {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--primary, #0F8676);
+  margin-bottom: 2mm;
+}
+
+.cert__kicker {
+  font-size: 8pt;
+  color: var(--ink-3, #6E878F);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* ---- Titre principal ---- */
+.cert__title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 32pt;
+  font-weight: 800;
+  color: var(--primary, #0F8676);
+  text-align: center;
+  line-height: 1.15;
+  margin: 2mm 0 1mm;
+  letter-spacing: -.02em;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Sous-titre décoratif ---- */
+.cert__subtitle {
+  font-size: 11pt;
+  color: var(--ink-2, #3E5B64);
+  text-align: center;
+  margin-bottom: 5mm;
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+/* ---- Séparateur doré ---- */
+.cert__divider {
+  width: 70mm;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold, #E0A23B), transparent);
+  margin: 0 auto 6mm;
+  border: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- Bloc destinataire ---- */
+.cert__recipient {
+  text-align: center;
+  margin-bottom: 5mm;
+  position: relative;
+  z-index: 1;
+}
+
+.cert__award-label {
+  font-size: 9pt;
+  color: var(--ink-3, #6E878F);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 2mm;
+}
+
+.cert__name {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 26pt;
+  font-weight: 800;
+  color: var(--ink, #14313A);
+  line-height: 1.2;
+}
+
+.cert__desc {
+  font-size: 10pt;
+  color: var(--ink-2, #3E5B64);
+  margin-top: 3mm;
+  max-width: 180mm;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ---- Bloc score ---- */
+.cert__score-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5mm;
+  margin-bottom: 6mm;
+  position: relative;
+  z-index: 1;
+}
+
+.cert__score-ring {
+  width: 24mm;
+  height: 24mm;
+  border-radius: 50%;
+  background: var(--primary-tint, #E3F1ED);
+  border: 2px solid var(--primary, #0F8676);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(15, 134, 118, 0.08);
+}
+
+.cert__score-value {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 20pt;
+  font-weight: 800;
+  color: var(--primary, #0F8676);
+  line-height: 1;
+}
+
+.cert__score-max {
+  font-size: 8pt;
+  color: var(--ink-3, #6E878F);
+  font-weight: 600;
+}
+
+.cert__score-label {
+  font-size: 10pt;
+  color: var(--ink-2, #3E5B64);
+  text-align: left;
+  line-height: 1.35;
+}
+
+.cert__tier {
+  font-weight: 700;
+  color: var(--primary-strong, #0A6E61);
+  font-size: 11pt;
+  display: block;
+}
+
+/* ---- Grille des badges ---- */
+.cert__badges {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 5mm;
+}
+
+.cert__badges-title {
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-3, #6E878F);
+  margin-bottom: 3mm;
+  font-weight: 700;
+}
+
+.cert__badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3mm;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.cert__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  background: var(--leaf-tint, #E7F4EA);
+  color: #2D7E43;
+  border: 1px solid rgba(87, 179, 111, .25);
+  border-radius: 999px;
+  padding: 2mm 4mm;
+  font-size: 8.5pt;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cert__badge-dot {
+  width: 2.5mm;
+  height: 2.5mm;
+  border-radius: 50%;
+  background: var(--leaf, #57B36F);
+  flex-shrink: 0;
+}
+
+/* ---- Pied de page (date + signature) ---- */
+.cert__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 250mm;
+  margin-top: auto;
+  padding-top: 5mm;
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--line);
+}
+
+.cert__date {
+  font-size: 9pt;
+  color: var(--ink-3, #6E878F);
+  font-weight: 500;
+}
+
+.cert__seal {
+  text-align: center;
+}
+
+.cert__seal-icon {
+  width: 14mm;
+  height: 14mm;
+  margin: 0 auto 1mm;
+  opacity: .5;
+}
+
+.cert__seal-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: var(--primary, #0F8676);
+}
+
+.cert__seal-text {
+  font-size: 8pt;
+  color: var(--ink-3, #6E878F);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+}
+
+.cert__id {
+  font-size: 8pt;
+  color: var(--ink-3, #6E878F);
+  font-family: monospace;
+}
+
+/* ==========================================================================
+   UI DE LA PAGE (Formulaire)
+   ========================================================================== */
+.cert-form {
+  margin-top: 20px;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--line);
+}
+
+.cert-form__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cert-form__title .icon-wrap {
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+}
+
+.cert-form__fields {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.cert-form__input {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  font-size: .92rem;
+  color: var(--ink);
+  transition: border-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.cert-form__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.cert-form__input::placeholder {
+  color: var(--ink-3);
+}
+
+/* Bouton "Télécharger mon certificat" */
+.cert-form__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: .92rem;
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease-out),
+              box-shadow var(--t-mid) var(--ease-out),
+              opacity var(--t-fast) ease;
+  box-shadow: var(--shadow-accent);
+}
+
+.cert-form__btn:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(15, 134, 118, .22);
+}
+
+.cert-form__btn:active {
+  transform: translateY(0) scale(.98);
+}
+
+.cert-form__btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cert-form__btn .icon-wrap {
+  width: 18px;
+  height: 18px;
+}
+
+.cert-form__btn .icon-wrap svg {
+  stroke: #fff;
+}
+

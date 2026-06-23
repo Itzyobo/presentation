@@ -132,5 +132,30 @@
     ].join("");
   };
 
+  /* ====================================================================
+     ILLUSTRATIONS DU LIVRET SECURITE (style ligne, palette de marque)
+     Reference par data.illustration_id dans content-securite.js.
+     ==================================================================== */
+
+  /* triangle du feu — 3 sommets + flamme (zone cible e4) */
+  art.triangle_feu = function () {
+    return '<img src="assets/feu.png" alt="Triangle du feu" style="width: 100%; height: auto; border-radius: 14px; display: block;">';
+  };
+
+  /* schema de parking vu de dessus — emplacements A B C D (e5) */
+  art.parking_schema = function () {
+    return '<img src="assets/ParkingABCD.png" alt="Schéma d\'un parking vu de dessus" style="width: 100%; height: auto; border-radius: 14px; display: block;">';
+  };
+
+  /* couloir + escalier avec obstacles (e7) */
+  art.couloir_risques = function () {
+    return '<img src="assets/Escaliers_et_chutes.png" alt="Couloir menant à un escalier, avec obstacles" style="width: 100%; height: auto; border-radius: 14px; display: block;">';
+  };
+
+  /* trois bureaux A B C (e9) */
+  art.bureau_abc = function () {
+    return '<img src="assets/BureauABC.png" alt="Trois postes de travail A, B et C" style="width: 100%; height: auto; border-radius: 14px; display: block;">';
+  };
+
   App.art = art;
 })(window);
